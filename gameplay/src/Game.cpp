@@ -157,6 +157,7 @@ int Game::run()
 
 bool Game::startup()
 {
+    int test = 1;
     if (_state != UNINITIALIZED)
         return false;
 
