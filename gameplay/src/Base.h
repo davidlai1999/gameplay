@@ -50,6 +50,8 @@ using std::min;
 using std::max;
 using std::modf;
 using std::atoi;
+using std::cout;
+using std::endl;
 
 // Common
 #ifndef NULL

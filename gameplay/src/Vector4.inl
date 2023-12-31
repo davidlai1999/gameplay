@@ -1,10 +1,8 @@
 #include "Matrix.h"
 #include "Vector4.h"
-
 namespace gameplay
 {
-
-inline const Vector4 Vector4::operator+(const Vector4& v) const
+inline const Vector Vector4::operator+(const Vector& v) const
 {
     Vector4 result(*this);
     result.add(v);

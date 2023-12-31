@@ -6,13 +6,17 @@ namespace gameplay
 {
 
 Vector3::Vector3()
-    : x(0.0f), y(0.0f), z(0.0f)
 {
+    x = 0.0f; 
+    y = 0.0f;
+    z = 0.0f;
 }
 
 Vector3::Vector3(float x, float y, float z)
-    : x(x), y(y), z(z)
 {
+    this->x = x;
+    this->y = y;
+    this->z = z;
 }
 
 Vector3::Vector3(const float* array)
@@ -25,9 +29,22 @@ Vector3::Vector3(const Vector3& p1, const Vector3& p2)
     set(p1, p2);
 }
 
+Vector3::Vector3(const Vector& p1, const Vector& p2)
+{
+    Vector3 *np1 = (Vector3*) &p1;
+    Vector3 *np2 = (Vector3*) &p2;
+    set(*np1, *np2);
+}
+
 Vector3::Vector3(const Vector3& copy)
 {
     set(copy);
+}
+
+Vector3::Vector3(const Vector& copy)
+{
+    Vector3 *cp1 = (Vector3*) &copy;
+    set(*cp1);
 }
 
 Vector3 Vector3::fromColor(unsigned int color)
@@ -47,6 +64,22 @@ Vector3 Vector3::fromColor(unsigned int color)
 
 Vector3::~Vector3()
 {
+}
+
+void Vector3::slow() {
+    cout << x << endl ;
+    cout << y << endl ;
+    cout << z << endl ;
+}
+
+float Vector3::getx() {
+    return x;
+}
+float Vector3::gety() {
+    return y;
+}
+float Vector3::getz() {
+    return z;
 }
 
 const Vector3& Vector3::zero()
@@ -98,11 +131,12 @@ float Vector3::angle(const Vector3& v1, const Vector3& v2)
     return atan2f(sqrt(dx * dx + dy * dy + dz * dz) + MATH_FLOAT_SMALL, dot(v1, v2));
 }
 
-void Vector3::add(const Vector3& v)
+void Vector3::add(const Vector& v)
 {
-    x += v.x;
-    y += v.y;
-    z += v.z;
+    Vector3 *v1 = (Vector3*) &v;
+    x += v1->x;
+    y += v1->y;
+    z += v1->z;
 }
 
 void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
@@ -114,27 +148,29 @@ void Vector3::add(const Vector3& v1, const Vector3& v2, Vector3* dst)
     dst->z = v1.z + v2.z;
 }
 
-void Vector3::clamp(const Vector3& min, const Vector3& max)
+void Vector3::clamp(const Vector& min, const Vector& max)
 {
-    GP_ASSERT(!(min.x > max.x || min.y > max.y || min.z > max.z));
+    Vector3 *tmin = (Vector3*)&min;
+    Vector3 *tmax = (Vector3*)&max;
+    GP_ASSERT(!(tmin->x > tmax->x || tmin->y > tmax->y || tmin->z > tmax->z));
 
     // Clamp the x value.
-    if (x < min.x)
-        x = min.x;
-    if (x > max.x)
-        x = max.x;
+    if (x < tmin->x)
+        x = tmin->x;
+    if (x > tmax->x)
+        x = tmax->x;
 
     // Clamp the y value.
-    if (y < min.y)
-        y = min.y;
-    if (y > max.y)
-        y = max.y;
+    if (y < tmin->y)
+        y = tmin->y;
+    if (y > tmax->y)
+        y = tmax->y;
 
     // Clamp the z value.
-    if (z < min.z)
-        z = min.z;
-    if (z > max.z)
-        z = max.z;
+    if (z < tmin->z)
+        z = tmin->z;
+    if (z > tmax->z)
+        z = tmax->z;
 }
 
 void Vector3::clamp(const Vector3& v, const Vector3& min, const Vector3& max, Vector3* dst)
@@ -179,27 +215,30 @@ void Vector3::cross(const Vector3& v1, const Vector3& v2, Vector3* dst)
     MathUtil::crossVector3(&v1.x, &v2.x, &dst->x);
 }
 
-float Vector3::distance(const Vector3& v) const
+float Vector3::distance(const Vector& v) const
 {
-    float dx = v.x - x;
-    float dy = v.y - y;
-    float dz = v.z - z;
+    Vector3 *v1 = (Vector3*)&v;
+    float dx = v1->x - x;
+    float dy = v1->y - y;
+    float dz = v1->z - z;
 
     return sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-float Vector3::distanceSquared(const Vector3& v) const
+float Vector3::distanceSquared(const Vector& v) const
 {
-    float dx = v.x - x;
-    float dy = v.y - y;
-    float dz = v.z - z;
+    Vector3 *v1 = (Vector3*)&v;
+    float dx = v1->x - x;
+    float dy = v1->y - y;
+    float dz = v1->z - z;
 
     return (dx * dx + dy * dy + dz * dz);
 }
 
-float Vector3::dot(const Vector3& v) const
+float Vector3::dot(const Vector& v) const
 {
-    return (x * v.x + y * v.y + z * v.z);
+    Vector3 *v1 = (Vector3*)&v;
+    return (x * v1->x + y * v1->y + z * v1->z);
 }
 
 float Vector3::dot(const Vector3& v1, const Vector3& v2)
@@ -224,21 +263,22 @@ void Vector3::negate()
     z = -z;
 }
 
-Vector3& Vector3::normalize()
+Vector& Vector3::normalize()
 {
     normalize(this);
     return *this;
 }
 
-void Vector3::normalize(Vector3* dst) const
+void Vector3::normalize(Vector* dst) const
 {
-    GP_ASSERT(dst);
+    Vector3 *tmp = (Vector3*)&dst;
+    GP_ASSERT(tmp);
 
-    if (dst != this)
+    if (tmp != this)
     {
-        dst->x = x;
-        dst->y = y;
-        dst->z = z;
+        tmp->x = x;
+        tmp->y = y;
+        tmp->z = z;
     }
 
     float n = x * x + y * y + z * z;
@@ -252,9 +292,11 @@ void Vector3::normalize(Vector3* dst) const
         return;
 
     n = 1.0f / n;
-    dst->x *= n;
-    dst->y *= n;
-    dst->z *= n;
+    tmp->x *= n;
+    tmp->y *= n;
+    tmp->z *= n;
+
+    dst = tmp;
 }
 
 void Vector3::scale(float scalar)
@@ -280,25 +322,29 @@ void Vector3::set(const float* array)
     z = array[2];
 }
 
-void Vector3::set(const Vector3& v)
+void Vector3::set(const Vector& v)
 {
-    this->x = v.x;
-    this->y = v.y;
-    this->z = v.z;
+    Vector3 *v1 = (Vector3*)&v; 
+    this->x = v1->x;
+    this->y = v1->y;
+    this->z = v1->z;
 }
 
-void Vector3::set(const Vector3& p1, const Vector3& p2)
+void Vector3::set(const Vector& p1, const Vector& p2)
 {
-    x = p2.x - p1.x;
-    y = p2.y - p1.y;
-    z = p2.z - p1.z;
+    Vector3 *v1 = (Vector3*)&p1; 
+    Vector3 *v2 = (Vector3*)&p2; 
+    x = v2->x - v1->x;
+    y = v2->y - v1->y;
+    z = v2->z - v1->z;
 }
 
-void Vector3::subtract(const Vector3& v)
+void Vector3::subtract(const Vector& v)
 {
-    x -= v.x;
-    y -= v.y;
-    z -= v.z;
+    Vector3 *v1 = (Vector3*)&v; 
+    x -= v1->x;
+    y -= v1->y;
+    z -= v1->z;
 }
 
 void Vector3::subtract(const Vector3& v1, const Vector3& v2, Vector3* dst)
@@ -317,5 +363,4 @@ void Vector3::smooth(const Vector3& target, float elapsedTime, float responseTim
         *this += (target - *this) * (elapsedTime / (elapsedTime + responseTime));
     }
 }
-
 }

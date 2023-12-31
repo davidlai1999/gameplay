@@ -3,7 +3,6 @@
 
 #include "Vector3.h"
 #include "Vector4.h"
-
 namespace gameplay
 {
 
@@ -59,6 +58,8 @@ public:
      * 0  0  0  1
      */
     Matrix();
+
+    void test(Vector* v);
 
     /**
      * Constructs a matrix initialized to the specified value.
@@ -137,7 +138,7 @@ public:
      * @param dst A matrix to store the result in.
      */
     static void createLookAt(const Vector3& eyePosition, const Vector3& targetPosition, const Vector3& up, Matrix* dst);
-
+    static void createLookAt(Vector *eyePosition, Vector *targetPosition, Vector *up, Matrix* dst);
     /**
      * Creates a view matrix based on the specified input parameters.
      *
@@ -230,7 +231,7 @@ public:
      */
     static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
                                 const Vector3& cameraUpVector, Matrix* dst);
-
+    static void createBillboard(Vector *objectPosition, Vector *cameraPosition, Vector *cameraUpVector, Matrix* dst);
     /**
      * Creates a spherical billboard that rotates around a specified object position with
      * provision for a safe default orientation.
@@ -250,6 +251,9 @@ public:
     static void createBillboard(const Vector3& objectPosition, const Vector3& cameraPosition,
                                 const Vector3& cameraUpVector, const Vector3& cameraForwardVector,
                                 Matrix* dst);
+    static void createBillboard(Vector *objectPosition, Vector *cameraPosition,
+                                Vector *cameraUpVector, Vector *cameraForwardVector,
+                                Matrix* dst);
 
     /**
      * Fills in an existing Matrix so that it reflects the coordinate system about a specified Plane.
@@ -266,7 +270,7 @@ public:
      * @param dst A matrix to store the result in.
      */
     static void createScale(const Vector3& scale, Matrix* dst);
-
+    static void createScale(Vector *scale, Matrix* dst);
     /**
      * Creates a scale matrix.
      *
@@ -293,7 +297,7 @@ public:
      * @param dst A matrix to store the result in.
      */
     static void createRotation(const Vector3& axis, float angle, Matrix* dst);
-
+    static void createRotation(Vector *axis, float angle, Matrix* dst);
     /**
      * Creates a matrix describing a rotation around the x-axis.
      *
@@ -336,7 +340,7 @@ public:
      * @param dst A matrix to store the result in.
      */
     static void createTranslation(const Vector3& translation, Matrix* dst);
-
+    static void createTranslation(Vector *translation, Matrix* dst);
     /**
      * Creates a translation matrix.
      *
@@ -386,6 +390,8 @@ public:
      * @param translation The translation.
      */
     bool decompose(Vector3* scale, Quaternion* rotation, Vector3* translation) const;
+
+    void slow();
 
     /**
      * Computes the determinant of this matrix.
@@ -564,6 +570,7 @@ public:
      * @param angle The angle (in radians).
      */
     void rotate(const Vector3& axis, float angle);
+    void rotate(Vector *axis, float angle);
 
     /**
      * Post-multiplies this matrix by the matrix corresponding to the specified
@@ -574,6 +581,7 @@ public:
      * @param dst A matrix to store the result in.
      */
     void rotate(const Vector3& axis, float angle, Matrix* dst) const;
+    void rotate(Vector *axis, float angle, Matrix* dst) const;
 
     /**
      * Post-multiplies this matrix by the matrix corresponding to the
@@ -671,6 +679,7 @@ public:
      * @param s The scale values along the x, y and z axes.
      */
     void scale(const Vector3& s);
+    void scale(Vector *s);
 
     /**
      * Post-multiplies this matrix by the matrix corresponding to the
@@ -680,6 +689,7 @@ public:
      * @param dst A matrix to store the result in.
      */
     void scale(const Vector3& s, Matrix* dst) const;
+    void scale(Vector *s, Matrix* dst) const;
 
     /**
      * Sets the values of this matrix.
@@ -761,6 +771,7 @@ public:
      * @param dst A vector to store the transformed point in.
      */
     void transformPoint(const Vector3& point, Vector3* dst) const;
+    void transformPoint(Vector *point, Vector3* dst) const;
 
     /**
      * Transforms the specified vector by this matrix by
@@ -781,6 +792,7 @@ public:
      * @param dst A vector to store the transformed vector in.
      */
     void transformVector(const Vector3& vector, Vector3* dst) const;
+    void transformVector(Vector *vector, Vector3* dst) const;
 
     /**
      * Transforms the specified vector by this matrix.
@@ -809,6 +821,7 @@ public:
      * @param dst A vector to store the transformed point in.
      */
     void transformVector(const Vector4& vector, Vector4* dst) const;
+    void transformVector(Vector *vector, Vector4* dst) const;
 
     /**
      * Post-multiplies this matrix by the matrix corresponding to the
@@ -838,6 +851,7 @@ public:
      * @param t The translation values along the x, y and z axes.
      */
     void translate(const Vector3& t);
+    void translate(Vector *t);
 
     /**
      * Post-multiplies this matrix by the matrix corresponding to the
@@ -847,6 +861,7 @@ public:
      * @param dst A matrix to store the result in.
      */
     void translate(const Vector3& t, Matrix* dst) const;
+    void translate(Vector *t, Matrix* dst) const;
 
     /**
      * Transposes this matrix.
@@ -927,6 +942,8 @@ private:
 
     static void createBillboardHelper(const Vector3& objectPosition, const Vector3& cameraPosition,
                                       const Vector3& cameraUpVector, const Vector3* cameraForwardVector,
+                                      Matrix* dst);
+    static void createBillboardHelper(Vector* objectPosition, Vector *cameraPosition, Vector *cameraUpVector, Vector *cameraForwardVector,
                                       Matrix* dst);
 };
 

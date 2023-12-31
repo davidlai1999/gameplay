@@ -1,9 +1,7 @@
 #include "Vector3.h"
 #include "Matrix.h"
-
 namespace gameplay
 {
-
 inline const Vector3 Vector3::operator+(const Vector3& v) const
 {
     Vector3 result(*this);
@@ -84,5 +82,4 @@ inline const Vector3 operator*(float x, const Vector3& v)
     result.scale(x);
     return result;
 }
-
 }

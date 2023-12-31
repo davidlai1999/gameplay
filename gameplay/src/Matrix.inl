@@ -1,8 +1,6 @@
 #include "Matrix.h"
-
 namespace gameplay
 {
-
 inline const Matrix Matrix::operator+(const Matrix& m) const
 {
     Matrix result(*this);
@@ -74,5 +72,4 @@ inline const Vector4 operator*(const Matrix& m, const Vector4& v)
     m.transformVector(v, &x);
     return x;
 }
-
 }

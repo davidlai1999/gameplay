@@ -1,6 +1,8 @@
 #ifndef VECTOR3_H_
 #define VECTOR3_H_
 
+#include "Vector.h"
+
 namespace gameplay
 {
 
@@ -15,37 +17,13 @@ class Matrix;
  * the magnitude of the vector intact. When used as a point,
  * the elements of the vector represent a position in 3D space.
  */
-class Vector3
+class Vector3 : public Vector
 {
 public:
 
-    /**
-     * The x-coordinate.
-     */
-    float x;
-
-    /**
-     * The y-coordinate.
-     */
-    float y;
-
-    /**
-     * The z-coordinate.
-     */
     float z;
 
-    /**
-     * Constructs a new vector initialized to all zeros.
-     */
     Vector3();
-
-    /**
-     * Constructs a new vector initialized to the specified values.
-     *
-     * @param x The x coordinate.
-     * @param y The y coordinate.
-     * @param z The z coordinate.
-     */
     Vector3(float x, float y, float z);
 
     /**
@@ -62,6 +40,7 @@ public:
      * @param p2 The second point.
      */
     Vector3(const Vector3& p1, const Vector3& p2);
+    Vector3(const Vector& p1, const Vector& p2);
 
     /**
      * Constructs a new vector that is a copy of the specified vector.
@@ -69,6 +48,7 @@ public:
      * @param copy The vector to copy.
      */
     Vector3(const Vector3& copy);
+    Vector3(const Vector& copy);
 
     /**
      * Creates a new vector from an integer interpreted as an RGB value.
@@ -84,6 +64,11 @@ public:
      * Destructor.
      */
     ~Vector3();
+
+    void slow();
+    float getx();
+    float gety();
+    float getz();
 
     /**
      * Returns the zero vector.
@@ -150,7 +135,7 @@ public:
      *
      * @param v The vector to add.
      */
-    void add(const Vector3& v);
+    void add(const Vector& v);
 
     /**
      * Adds the specified vectors and stores the result in dst.
@@ -167,7 +152,7 @@ public:
      * @param min The minimum value.
      * @param max The maximum value.
      */
-    void clamp(const Vector3& min, const Vector3& max);
+    void clamp(const Vector& min, const Vector& max);
 
     /**
      * Clamps the specified vector within the specified range and returns it in dst.
@@ -204,7 +189,7 @@ public:
      * 
      * @see distanceSquared
      */
-    float distance(const Vector3& v) const;
+    float distance(const Vector& v) const;
 
     /**
      * Returns the squared distance between this vector and v.
@@ -220,7 +205,7 @@ public:
      * 
      * @see distance
      */
-    float distanceSquared(const Vector3& v) const;
+    float distanceSquared(const Vector& v) const;
 
     /**
      * Returns the dot product of this vector and the specified vector.
@@ -229,7 +214,7 @@ public:
      * 
      * @return The dot product.
      */
-    float dot(const Vector3& v) const;
+    float dot(const Vector& v) const;
 
     /**
      * Returns the dot product between the specified vectors.
@@ -280,7 +265,7 @@ public:
      * 
      * @return This vector, after the normalization occurs.
      */
-    Vector3& normalize();
+    Vector& normalize();
 
     /**
      * Normalizes this vector and stores the result in dst.
@@ -291,7 +276,7 @@ public:
      *
      * @param dst The destination vector.
      */
-    void normalize(Vector3* dst) const;
+    void normalize(Vector* dst) const;
 
     /**
      * Scales all elements of this vector by the specified value.
@@ -321,12 +306,12 @@ public:
      *
      * @param v The vector to copy.
      */
-    void set(const Vector3& v);
+    void set(const Vector& v);
 
     /**
      * Sets this vector to the directional vector between the specified points.
      */
-    void set(const Vector3& p1, const Vector3& p2);
+    void set(const Vector& p1, const Vector& p2);
 
     /**
      * Subtracts this vector and the specified vector as (this - v)
@@ -334,7 +319,7 @@ public:
      *
      * @param v The vector to subtract.
      */
-    void subtract(const Vector3& v);
+    void subtract(const Vector& v);
 
     /**
      * Subtracts the specified vectors and stores the result in dst.
@@ -468,9 +453,7 @@ public:
  * @return The scaled vector.
  */
 inline const Vector3 operator*(float x, const Vector3& v);
-
 }
-
 #include "Vector3.inl"
 
 #endif
